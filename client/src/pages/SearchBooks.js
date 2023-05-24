@@ -6,8 +6,7 @@ import { GET_ME } from '../graphql/queries';
 import Auth from '../utils/auth';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
-const SearchBooks = () => {
-
+function SearchBooksComponent() {
   const [searchedBooks, setSearchedBooks] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
@@ -15,7 +14,7 @@ const SearchBooks = () => {
 
   useEffect(() => saveBookIds(savedBookIds), [savedBookIds]);
 
-  const handleFormSubmit = async (event) => {
+  const formSubmitHandler = async (event) => {
     event.preventDefault();
     if (!searchInput) return;
 
@@ -39,7 +38,7 @@ const SearchBooks = () => {
     }
   };
 
-  const handleSaveBook = async (bookId) => {
+  const saveBookHandler = async (bookId) => {
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
     try {
       await saveBook({
@@ -61,7 +60,7 @@ const SearchBooks = () => {
       <div className='text-light bg-dark pt-5'>
         <Container>
           <h1>Search for Books!</h1>
-          <Form onSubmit={handleFormSubmit}>
+          <Form onSubmit={formSubmitHandler}>
             <Row>
               <Col xs={12} md={8}>
                 <Form.Control
@@ -105,7 +104,7 @@ const SearchBooks = () => {
                       <Button
                         disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
                         className='btn-block btn-info'
-                        onClick={() => handleSaveBook(book.bookId)}>
+                        onClick={() => saveBookHandler(book.bookId)}>
                         {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
                           ? 'This book has already been saved!'
                           : 'Save this Book!'}
@@ -122,4 +121,4 @@ const SearchBooks = () => {
   );
 };
 
-export default SearchBooks;
+export default SearchBooksComponent;

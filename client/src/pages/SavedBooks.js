@@ -6,11 +6,11 @@ import { REMOVE_BOOK } from '../graphql/mutations';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
-const SavedBooks = () => {
-
+function SavedBooksComponent() {
   const { loading, data: userData } = useQuery(GET_ME);
   const [removeBook] = useMutation(REMOVE_BOOK);
-  const handleDeleteBook = async (bookId) => {
+
+  const deleteBookHandler = async (bookId) => {
     await removeBook({
       variables: { bookId },
       update: (cache) => {
@@ -25,7 +25,7 @@ const SavedBooks = () => {
   };
 
   if (loading) return <h2>LOADING...</h2>;
-  
+
   const savedBooks = userData && userData.me ? userData.me.savedBooks : [];
 
   return (
@@ -51,7 +51,7 @@ const SavedBooks = () => {
                     <Card.Title>{book.title}</Card.Title>
                     <p className='small'>Authors: {book.authors}</p>
                     <Card.Text>{book.description}</Card.Text>
-                    <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
+                    <Button className='btn-block btn-danger' onClick={() => deleteBookHandler(book.bookId)}>
                       Delete this Book!
                     </Button>
                   </Card.Body>
@@ -65,4 +65,4 @@ const SavedBooks = () => {
   );
 };
 
-export default SavedBooks;
+export default SavedBooksComponent;
